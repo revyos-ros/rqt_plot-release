@@ -137,7 +137,7 @@ tracks:
     name: upstream
     patches: null
     release_inc: '1'
-    release_repo_url: null
+    release_repo_url: git@github.com:revyos-ros/rqt_plot-release.git
     release_tag: :{version}
     ros_distro: humble
     vcs_type: git
