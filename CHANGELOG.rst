@@ -2,7 +2,36 @@
 Changelog for package rqt_plot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.1.2 (2022-05-10)
+1.4.0 (2024-03-28)
+------------------
+* Add in copyright tests to rqt_bag. (`#95 <https://github.com/ros-visualization/rqt_plot/issues/95>`_)
+* Add a test dependency on pytest. (`#94 <https://github.com/ros-visualization/rqt_plot/issues/94>`_)
+* Contributors: Chris Lalancette
+
+1.3.2 (2024-02-07)
+------------------
+* Add in a pytest dependency for running tests. (`#92 <https://github.com/ros-visualization/rqt_plot/issues/92>`_)
+* Contributors: Chris Lalancette
+
+1.3.1 (2023-05-11)
+------------------
+* Fix regression from #87 (`#90 <https://github.com/ros-visualization/rqt_plot/issues/90>`_)
+* Contributors: Yadunund
+
+1.3.0 (2023-04-28)
+------------------
+
+1.2.2 (2023-04-11)
+------------------
+* Changes the use of __slots_\_ for the field and field type getter (`#87 <https://github.com/ros-visualization/rqt_plot/issues/87>`_)
+* Contributors: Eloy Briceno
+
+1.2.1 (2023-02-14)
+------------------
+* [rolling] Update maintainers - 2022-11-07 (`#83 <https://github.com/ros-visualization/rqt_plot/issues/83>`_)
+* Contributors: Audrow Nash, Jacob Perron
+
+1.2.0 (2022-05-10)
 ------------------
 * Fix fixed-size Array visualization (`#81 <https://github.com/ros-visualization/rqt_plot/issues/81>`_)
 * Contributors: Michael Jeronimo
