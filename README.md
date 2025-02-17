@@ -1,3 +1,26 @@
+## rqt_plot (humble) - 1.1.3-1
+
+The packages in the `rqt_plot` repository were released into the `humble` distro by running `/home/z572/gits/revyos-ros/venv2/bin/bloom-release -r humble rqt_plot --override-release-repository-push-url git@github.com:revyos-ros/rqt_plot-release.git` on `Mon, 17 Feb 2025 03:41:33 -0000`
+
+The `rqt_plot` package was released.
+
+Version of package(s) in repository `rqt_plot`:
+
+- upstream repository: https://github.com/ros-visualization/rqt_plot.git
+- release repository: https://github.com/revyos-ros/rqt_plot-release.git
+- rosdistro version: `1.1.3-1`
+- old version: `1.1.2-2`
+- new version: `1.1.3-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## rqt_plot (jazzy) - 1.4.0-3
 
 The packages in the `rqt_plot` repository were released into the `jazzy` distro by running `/home/z572/gits/revyos-ros/venv/bin/bloom-release -r jazzy rqt_plot --override-release-repository-push-url git@github.com:revyos-ros/rqt_plot-release.git` on `Sat, 15 Jun 2024 06:47:32 -0000`
