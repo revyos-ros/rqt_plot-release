@@ -1,6 +1,6 @@
 <package format="2">
   <name>rqt_plot</name>
-  <version>1.4.0</version>
+  <version>1.4.2</version>
   <description>rqt_plot provides a GUI plugin visualizing numeric values in a 2D plot using different plotting backends.</description>
 
   <maintainer email="brandon@openrobotics.org">Brandon Ong</maintainer>
@@ -23,6 +23,7 @@
   <exec_depend>python3-catkin-pkg-modules</exec_depend>
   <exec_depend version_gte="0.2.25">qt_gui_py_common</exec_depend>
   <exec_depend>rclpy</exec_depend>
+  <exec_depend>rosidl_runtime_py</exec_depend>
   <exec_depend>rqt_gui</exec_depend>
   <exec_depend>rqt_gui_py</exec_depend>
   <exec_depend>rqt_py_common</exec_depend>
