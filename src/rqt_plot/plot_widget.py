@@ -1,33 +1,29 @@
-#!/usr/bin/env python
-
 # Copyright (c) 2011, Dorian Scholz, TU Darmstadt
-# All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
+# modification, are permitted provided that the following conditions are met:
 #
-#   * Redistributions of source code must retain the above copyright
-#     notice, this list of conditions and the following disclaimer.
-#   * Redistributions in binary form must reproduce the above
-#     copyright notice, this list of conditions and the following
-#     disclaimer in the documentation and/or other materials provided
-#     with the distribution.
-#   * Neither the name of the TU Darmstadt nor the names of its
-#     contributors may be used to endorse or promote products derived
-#     from this software without specific prior written permission.
+#    * Redistributions of source code must retain the above copyright
+#      notice, this list of conditions and the following disclaimer.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#    * Redistributions in binary form must reproduce the above copyright
+#      notice, this list of conditions and the following disclaimer in the
+#      documentation and/or other materials provided with the distribution.
+#
+#    * Neither the name of the TU Darmstadt nor the names of its
+#      contributors may be used to endorse or promote products derived from
+#      this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
@@ -117,15 +113,17 @@ def get_plot_fields(node, topic_name):
         no_field_error_msg = base_err_msg + f"'{name}' is not a field of '{topic_type_str}'"
 
         try:
-            slot_index = current_message_class.__slots__.index(f'_{name}')
+            # This can only be done because the dict is order preserving and all the field name and values
+            # are stored in the same order.
+            field_name_index = list(current_message_class.get_fields_and_field_types().keys()).index(f'{name}')
         except ValueError:
             return [], no_field_error_msg
-        current_type = current_message_class.SLOT_TYPES[slot_index]
+        current_type = current_message_class.SLOT_TYPES[field_name_index]
         is_array_or_sequence = isinstance(current_type, AbstractNestedType)
 
         if is_array_or_sequence:
             if not has_index:
-                return [], base_error_msg + f'{name} is a nested type but no index provided'
+                return [], base_err_msg + f"'{name}' is a nested type but no index provided"
 
             if current_type.has_maximum_size():
                 # has_maximum_size() doesn't necessarily mean that the object has a 'maximum_size' field. The meaning
@@ -133,11 +131,11 @@ def get_plot_fields(node, topic_name):
                 size = current_type.maximum_size if hasattr(current_type, 'maximum_size') else current_type.size
                 if index >= size:
                     return [], (
-                        base_error_msg +
+                        base_err_msg +
                         f"index '{index}' out of bounds, maximum size is {size}")
             current_type = current_type.value_type
         elif has_index:
-            return [], base_error_msg + "{name} is not an array or sequence"
+            return [], base_err_msg + f"'{name}' is not an array or sequence"
 
         if not isinstance(current_type, NamespacedType):
             break
@@ -162,13 +160,16 @@ def get_plot_fields(node, topic_name):
         plottable_fields = []
         current_message_class = import_message_from_namespaced_type(current_type)
         for n_field, n_current_type in zip(
-            current_message_class.__slots__, current_message_class.SLOT_TYPES
+            current_message_class.get_fields_and_field_types().keys(), current_message_class.SLOT_TYPES
         ):
             if isinstance(n_current_type, BasicType):
-                plottable_fields.append(n_field[1:])
+                plottable_fields.append(n_field)
         if plottable_fields:
+            # We try to plot the sub-fields of a field if '/topic/field' or '/topic/field/', so
+            # make sure to remove trailing slashes
+            topic_name_rstrip = topic_name.rstrip('/')
             return (
-                [f'{topic_name}/{field}' for field in plottable_fields],
+                [f'{topic_name_rstrip}/{field}' for field in plottable_fields],
                 f"{len(plottable_fields)} plottable fields in '{topic_name}'"
             )
     if not isinstance(current_type, BasicType):
